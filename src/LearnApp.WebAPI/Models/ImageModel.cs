@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace LearnApp.WebAPI.Models
+﻿namespace LearnApp.WebAPI.Models
 {
     /// <summary>
     /// Root JSON object of image.
