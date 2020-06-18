@@ -1,4 +1,4 @@
-﻿namespace LearnApp.WebAPI.Models
+﻿namespace LearnApp.Core.Models
 {
     /// <summary>
     /// Class which serve as the secret data model.

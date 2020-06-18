@@ -1,4 +1,4 @@
-﻿using LearnApp.WebAPI.Models;
+﻿using LearnApp.Core.Models;
 using LearnApp.WebAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -12,7 +12,7 @@ namespace LearnApp.WebAPI.Controllers
     /// </summary>
     [ApiController]
     [Route("api/[controller]")]
-    public class ApiController : ControllerBase
+    public class ContentController : ControllerBase
     {
         private readonly HttpHandler handler = new HttpHandler();
 

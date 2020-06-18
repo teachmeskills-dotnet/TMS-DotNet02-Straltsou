@@ -1,6 +1,6 @@
 ﻿using Flurl;
 using Flurl.Http;
-using LearnApp.WebAPI.Models;
+using LearnApp.Core.Models;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;

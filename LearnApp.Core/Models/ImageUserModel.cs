@@ -1,56 +1,9 @@
-﻿namespace LearnApp.WebAPI.Models
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace LearnApp.Core.Models
 {
-    /// <summary>
-    /// Root JSON object of image.
-    /// </summary>
-    public class ImageModel
-    {
-        public string id { get; set; }
-        public string created_at { get; set; }
-        public string updated_at { get; set; }
-        public string promoted_at { get; set; }
-        public int width { get; set; }
-        public int height { get; set; }
-        public string color { get; set; }
-        public string description { get; set; }
-        public string alt_description { get; set; }
-        public Urls urls { get; set; }
-        public Links links { get; set; }
-        public object[] categories { get; set; }
-        public int likes { get; set; }
-        public bool liked_by_user { get; set; }
-        public object[] current_user_collections { get; set; }
-        public object sponsorship { get; set; }
-        public User user { get; set; }
-        public Exif exif { get; set; }
-        public Location location { get; set; }
-        public int views { get; set; }
-        public int downloads { get; set; }
-    }
-
-    /// <summary>
-    /// Link for searching image.
-    /// </summary>
-    public class Urls
-    {
-        public string raw { get; set; }
-        public string full { get; set; }
-        public string regular { get; set; }
-        public string small { get; set; }
-        public string thumb { get; set; }
-    }
-
-    /// <summary>
-    /// Other links. 
-    /// </summary>
-    public class Links
-    {
-        public string self { get; set; }
-        public string html { get; set; }
-        public string download { get; set; }
-        public string download_location { get; set; }
-    }
-
     /// <summary>
     /// User information.
     /// </summary>
@@ -66,7 +19,7 @@
         public string portfolio_url { get; set; }
         public string bio { get; set; }
         public string location { get; set; }
-        public Links1 links { get; set; }
+        public UserLinks links { get; set; }
         public Profile_Image profile_image { get; set; }
         public string instagram_username { get; set; }
         public int total_collections { get; set; }
@@ -78,7 +31,7 @@
     /// <summary>
     /// Links to user info.
     /// </summary>
-    public class Links1
+    public class UserLinks
     {
         public string self { get; set; }
         public string html { get; set; }
