@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29911.84
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LearnApp.WebAPI", "src\LearnApp.WebAPI\LearnApp.WebAPI.csproj", "{C6599D30-1645-42EC-BC7A-2FE200D8B832}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearnApp.Core", "LearnApp.Core\LearnApp.Core.csproj", "{A24432C1-367C-472E-92F5-EA0AEF6076F8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearnApp.Core", "src\LearnApp.Core\LearnApp.Core.csproj", "{A24432C1-367C-472E-92F5-EA0AEF6076F8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

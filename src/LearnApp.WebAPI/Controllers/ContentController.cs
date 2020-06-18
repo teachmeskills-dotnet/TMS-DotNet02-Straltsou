@@ -1,5 +1,5 @@
 ﻿using LearnApp.Core.Models;
-using LearnApp.WebAPI.Services;
+using LearnApp.Core.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;

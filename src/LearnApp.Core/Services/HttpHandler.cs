@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace LearnApp.WebAPI.Services
+namespace LearnApp.Core.Services
 {
     /// <summary>
     /// Class which serves as a hendler for user requests.
