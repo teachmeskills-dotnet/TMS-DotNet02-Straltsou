@@ -9,7 +9,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LearnApp.Core\LearnApp.Core.csproj" />
+    <ProjectReference Include="..\LearnApp.BLL\LearnApp.BLL.csproj" />
+    <ProjectReference Include="..\LearnApp.Common\LearnApp.Common.csproj" />
   </ItemGroup>
 
 

@@ -1,4 +1,5 @@
 using LearnApp.Core.Models;
+using LearnApp.Core.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,6 +25,7 @@ namespace LearnApp.WebAPI
                         options.SerializerSettings.ContractResolver = new DefaultContractResolver();
                     });
             services.Configure<ApiConfig>(Configuration.GetSection("API"));
+            services.AddScoped<HttpHandler>();
         }
 
         public void Configure(IApplicationBuilder app)

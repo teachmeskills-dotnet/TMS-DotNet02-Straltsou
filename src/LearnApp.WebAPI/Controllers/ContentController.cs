@@ -1,6 +1,9 @@
 ﻿using LearnApp.Core.Models;
 using LearnApp.Core.Services;
+using LearnApp.DAL.Models.ImageModel;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -14,28 +17,37 @@ namespace LearnApp.WebAPI.Controllers
     [Route("api/[controller]")]
     public class ContentController : ControllerBase
     {
-        private readonly HttpHandler handler = new HttpHandler();
+        private readonly IOptions<ApiConfig> _options;
+        private readonly HttpHandler _handler;
+
+        public ContentController(IOptions<ApiConfig> options, HttpHandler handler)
+        {
+            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _handler = handler ?? throw new ArgumentNullException(nameof(handler));
+        }
 
         /// <summary>
         /// GET method for getting YandexTranslate model.
         /// </summary>
         /// <param name="userInput">Incoming update.</param>
         /// <returns>JSON object.</returns>
-        [HttpPost]
-        public async Task<ActionResult<YandexModel>> PostTranslate(string input)
+        [HttpGet("translate")]
+        public async Task<ActionResult<YandexModel>> Translate(string input)
         {
-            return await handler.GetYandexModel(input);
+            return await _handler.GetYandexModel(input);
         }
 
+        // api/content/picture?inputTwo=qweqwe
+        // api/content/picture
         /// <summary>
         /// GET method for getting Unsplash model.
         /// </summary>
         /// <param name="userInput">Incoming update.</param>
         /// <returns>JSON object.</returns>
-        [HttpPost]
-        public async Task<ActionResult<ImageModel>> PostPicture(string input)
+        [HttpGet("picture")]
+        public async Task<ActionResult<ImageModel>> Picture(string input)
         {
-            return await handler.GetUnsplashModel(input);
+            return await _handler.GetUnsplashModel(input);
         }
 
         /// <summary>
@@ -43,10 +55,10 @@ namespace LearnApp.WebAPI.Controllers
         /// </summary>
         /// <param name="userInput">Incoming update.</param>
         /// <returns>JSON object.</returns>
-        [HttpPost]
-        public async Task<ActionResult<IEnumerable<ContextModel>>> PostContext(string input)
+        [HttpGet("context")]
+        public async Task<ActionResult<IEnumerable<ContextModel>>> Context(string input)
         {
-            return await handler.GetContextModelAsync(input);
+            return await _handler.GetContextModelAsync(input);
         }
     }
 }

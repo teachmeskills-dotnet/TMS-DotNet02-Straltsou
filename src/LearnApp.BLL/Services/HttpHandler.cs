@@ -1,6 +1,7 @@
 ﻿using Flurl;
 using Flurl.Http;
 using LearnApp.Core.Models;
+using LearnApp.DAL.Models.ImageModel;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -9,16 +10,11 @@ using System.Threading.Tasks;
 namespace LearnApp.Core.Services
 {
     /// <summary>
-    /// Class which serves as a hendler for user requests.
+    /// Class which serves as a handler for user requests.
     /// </summary>
     public class HttpHandler
     {
         private readonly IOptions<ApiConfig> _options;
-
-        /// <summary>
-        /// Default constuctor.
-        /// </summary>
-        public HttpHandler() { }
 
         /// <summary>
         /// Constructor which serve as transmitter of secret data.
@@ -77,8 +73,8 @@ namespace LearnApp.Core.Services
             var host = "https://api.unsplash.com/";
             var segments = new List<string>
             {
-                "photos",
-                "random"
+                "search",
+                "photos"
             };
             object[] path = segments.ToArray();
             var parameters = new { client_id = _options.Value.UnsplashAPI, query = input };
@@ -95,7 +91,7 @@ namespace LearnApp.Core.Services
         {
             var response = await "https://api.datamuse.com/"
                 .AppendPathSegment("words")
-                .SetQueryParams(new { ml = input, qe = "ml", max = "7", md = "d" })
+                .SetQueryParams(new { ml = input, qe = "ml", max = "8", md = "d" })
                 .GetAsync()
                 .ReceiveJson<List<ContextModel>>();
             return response;

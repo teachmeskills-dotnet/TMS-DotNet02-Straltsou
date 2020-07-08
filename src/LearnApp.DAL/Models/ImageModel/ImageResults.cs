@@ -1,11 +1,11 @@
 ﻿using LearnApp.Core.Models;
 
-namespace LearnApp.Core.Models
+namespace LearnApp.Core.Models.ImageModel
 {
     /// <summary>
-    /// Root JSON object of image.
+    /// JSON results of image model.
     /// </summary>
-    public class ImageModel
+    public class ImageResult
     {
         public string id { get; set; }
         public string created_at { get; set; }
