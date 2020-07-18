@@ -1,5 +1,9 @@
-﻿using LearnApp.Core.Models;
+﻿using AutoMapper;
+using LearnApp.Common.Interfaces;
+using LearnApp.Core.Models;
 using LearnApp.Core.Services;
+using LearnApp.DAL.DTO;
+using LearnApp.DAL.Models;
 using LearnApp.DAL.Models.ImageModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -11,19 +15,23 @@ using System.Threading.Tasks;
 namespace LearnApp.WebAPI.Controllers
 {
     /// <summary>
-    /// Controller for processing translate requests.
+    /// Controller for processing content requests.
     /// </summary>
     [ApiController]
     [Route("api/[controller]")]
     public class ContentController : ControllerBase
     {
         private readonly IOptions<ApiConfig> _options;
+        private readonly IRepository<Card> _repository;
+        private readonly IMapper _mapper;
         private readonly HttpHandler _handler;
 
-        public ContentController(IOptions<ApiConfig> options, HttpHandler handler)
+        public ContentController(IOptions<ApiConfig> options, HttpHandler handler, IMapper mapper, IRepository<Card> repository)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _handler = handler ?? throw new ArgumentNullException(nameof(handler));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _repository = repository ?? throw new ArgumentNullException(nameof(handler));
         }
 
         /// <summary>
@@ -34,11 +42,9 @@ namespace LearnApp.WebAPI.Controllers
         [HttpGet("translate")]
         public async Task<ActionResult<YandexModel>> Translate(string input)
         {
-            return await _handler.GetYandexModel(input);
+            return await _handler.GetYandexModelAsync(input);
         }
 
-        // api/content/picture?inputTwo=qweqwe
-        // api/content/picture
         /// <summary>
         /// GET method for getting Unsplash model.
         /// </summary>
@@ -47,7 +53,7 @@ namespace LearnApp.WebAPI.Controllers
         [HttpGet("picture")]
         public async Task<ActionResult<ImageModel>> Picture(string input)
         {
-            return await _handler.GetUnsplashModel(input);
+            return await _handler.GetUnsplashModelAsync(input);
         }
 
         /// <summary>
@@ -59,6 +65,23 @@ namespace LearnApp.WebAPI.Controllers
         public async Task<ActionResult<IEnumerable<ContextModel>>> Context(string input)
         {
             return await _handler.GetContextModelAsync(input);
+        }
+
+
+        /// <summary>
+        /// POST method for save information from the card.
+        /// </summary>
+        /// <param name="card">Incoming card.</param>
+        /// <returns>Ok result.</returns>
+        [HttpPost]
+        public async Task<IActionResult> RememberCard([FromBody] CardDto cardDto)
+        {
+            var modelCard = _mapper.Map<Card>(cardDto);
+
+            _repository.CreateEntity(modelCard);
+            await _repository.SaveChangesAsync();
+
+            return Ok();
         }
     }
 }

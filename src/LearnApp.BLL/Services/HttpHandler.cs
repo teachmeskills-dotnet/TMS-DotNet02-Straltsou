@@ -47,7 +47,7 @@ namespace LearnApp.Core.Services
         /// </summary>
         /// <param name="input">Incoming update.</param>
         /// <returns>JSON model.</returns>
-        public async Task<YandexModel> GetYandexModel(string input)
+        public async Task<YandexModel> GetYandexModelAsync(string input)
         {
             var host = "https://translate.yandex.net/";
             var segments = new List<string>
@@ -68,7 +68,7 @@ namespace LearnApp.Core.Services
         /// </summary>
         /// <param name="input">Incoming update.</param>
         /// <returns>JSON model.</returns>
-        public async Task<ImageModel> GetUnsplashModel(string input)
+        public async Task<ImageModel> GetUnsplashModelAsync(string input)
         {
             var host = "https://api.unsplash.com/";
             var segments = new List<string>

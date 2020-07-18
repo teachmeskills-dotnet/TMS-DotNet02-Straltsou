@@ -3,7 +3,7 @@
 namespace LearnApp.Core.Models.ImageModel
 {
     /// <summary>
-    /// JSON results of image model.
+    /// Main image info.
     /// </summary>
     public class ImageResult
     {
@@ -31,7 +31,7 @@ namespace LearnApp.Core.Models.ImageModel
     }
 
     /// <summary>
-    /// Link for searching image.
+    /// Image links by quality.
     /// </summary>
     public class Urls
     {
