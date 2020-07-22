@@ -1,13 +1,16 @@
 using AutoMapper;
 using LearnApp.BLL.Services;
+using LearnApp.Common.Config;
 using LearnApp.Common.Interfaces;
 using LearnApp.Core.Models;
 using LearnApp.Core.Services;
 using LearnApp.DAL.Persistence;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
 using System;
 
@@ -24,12 +27,31 @@ namespace LearnApp.WebAPI
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.RequireHttpsMetadata = false;
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidIssuer = AuthenticationOptions.ISSUER,
+
+                        ValidateAudience = true,
+                        ValidAudience = AuthenticationOptions.AUDIENCE,
+
+                        ValidateLifetime = true,
+                        IssuerSigningKey = AuthenticationOptions.GetSymmetricSecurityKey(),
+                        ValidateIssuerSigningKey = true
+                    };
+                });
+
             services.AddControllers()
                     .AddNewtonsoftJson(options =>
                     {
                         options.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
                         options.SerializerSettings.ContractResolver = new DefaultContractResolver();
                     });
+
             services.Configure<ApiConfig>(Configuration.GetSection("API"));
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped<HttpHandler>();
@@ -39,12 +61,12 @@ namespace LearnApp.WebAPI
 
         public void Configure(IApplicationBuilder app)
         {
-            app.UseDefaultFiles();
-            app.UseStaticFiles();
-
             app.UseRouting();
 
             app.UseCors(config => config.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

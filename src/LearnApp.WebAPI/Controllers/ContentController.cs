@@ -5,6 +5,7 @@ using LearnApp.Core.Services;
 using LearnApp.DAL.DTO;
 using LearnApp.DAL.Models;
 using LearnApp.DAL.Models.ImageModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System;
@@ -40,6 +41,7 @@ namespace LearnApp.WebAPI.Controllers
         /// <param name="userInput">Incoming update.</param>
         /// <returns>JSON object.</returns>
         [HttpGet("translate")]
+        [Authorize]
         public async Task<ActionResult<YandexModel>> Translate(string input)
         {
             return await _handler.GetYandexModelAsync(input);
@@ -51,6 +53,7 @@ namespace LearnApp.WebAPI.Controllers
         /// <param name="userInput">Incoming update.</param>
         /// <returns>JSON object.</returns>
         [HttpGet("picture")]
+        [Authorize]
         public async Task<ActionResult<ImageModel>> Picture(string input)
         {
             return await _handler.GetUnsplashModelAsync(input);
@@ -62,6 +65,7 @@ namespace LearnApp.WebAPI.Controllers
         /// <param name="userInput">Incoming update.</param>
         /// <returns>JSON object.</returns>
         [HttpGet("context")]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<ContextModel>>> Context(string input)
         {
             return await _handler.GetContextModelAsync(input);
@@ -74,6 +78,7 @@ namespace LearnApp.WebAPI.Controllers
         /// <param name="card">Incoming card.</param>
         /// <returns>Ok result.</returns>
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> RememberCard([FromBody] CardDto cardDto)
         {
             var modelCard = _mapper.Map<Card>(cardDto);
