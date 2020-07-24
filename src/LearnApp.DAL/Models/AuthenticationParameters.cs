@@ -4,7 +4,7 @@ using System.Text;
 
 namespace LearnApp.DAL.Models
 {
-    public class AuthParameters
+    public class AuthenticationParameters
     {
         public string Username { get; set; }
 

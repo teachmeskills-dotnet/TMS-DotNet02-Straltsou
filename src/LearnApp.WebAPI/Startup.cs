@@ -4,6 +4,7 @@ using LearnApp.Common.Config;
 using LearnApp.Common.Interfaces;
 using LearnApp.Core.Models;
 using LearnApp.Core.Services;
+using LearnApp.DAL.Models;
 using LearnApp.DAL.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -13,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
 using System;
+using System.Text;
 
 namespace LearnApp.WebAPI
 {
@@ -27,21 +29,30 @@ namespace LearnApp.WebAPI
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
+            services.Configure<ApiConfig>(Configuration.GetSection("API"));
+
+            var appSettingsSection = Configuration.GetSection("AppSettings");
+            services.Configure<AppSettings>(appSettingsSection);
+            var appSettings = appSettingsSection.Get<AppSettings>();
+            var key = Encoding.UTF8.GetBytes(appSettings.SecretEncryptionKey);
+
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer(x =>
                 {
-                    options.RequireHttpsMetadata = false;
-                    options.TokenValidationParameters = new TokenValidationParameters
+                    x.RequireHttpsMetadata = false;
+                    x.SaveToken = true;
+                    x.TokenValidationParameters = new TokenValidationParameters
                     {
-                        ValidateIssuer = true,
-                        ValidIssuer = AuthenticationOptions.ISSUER,
-
-                        ValidateAudience = true,
-                        ValidAudience = AuthenticationOptions.AUDIENCE,
-
-                        ValidateLifetime = true,
-                        IssuerSigningKey = AuthenticationOptions.GetSymmetricSecurityKey(),
-                        ValidateIssuerSigningKey = true
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(key),
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        // set clockskew to zero so tokens expire exactly at token expiration time (instead of 5 minutes later)
+                        ClockSkew = TimeSpan.Zero
                     };
                 });
 
@@ -52,8 +63,8 @@ namespace LearnApp.WebAPI
                         options.SerializerSettings.ContractResolver = new DefaultContractResolver();
                     });
 
-            services.Configure<ApiConfig>(Configuration.GetSection("API"));
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            services.AddScoped<IJwtAuthenticationManager<AuthenticationResponse, AuthenticationParameters>, JwtAuthenticationManager>();
             services.AddScoped<HttpHandler>();
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ApplicationConnection")));
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

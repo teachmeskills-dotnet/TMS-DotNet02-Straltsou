@@ -14,7 +14,12 @@ namespace LearnApp.DAL.Persistence
     public class ApplicationDbContext : DbContext
     {
         /// <summary>
-        /// Person entities.
+        /// Person entities
+        /// </summary>
+        public DbSet<ApplicationUser> Users { get; set; }
+
+        /// <summary>
+        /// Card entities.
         /// </summary>
         public DbSet<Card> Cards { get; set; }
 

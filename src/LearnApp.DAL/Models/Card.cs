@@ -23,5 +23,16 @@ namespace LearnApp.DAL.Models
         /// Remembered definition.
         /// </summary>
         public string Definition { get; set; }
+
+
+        /// <summary>
+        /// User identifier. 
+        /// </summary>
+        public int ApplicationUserId { get; set; }
+
+        /// <summary>
+        /// Navigational property for EF Core. 
+        /// </summary>
+        public ApplicationUser User { get; set; }
     }
 }

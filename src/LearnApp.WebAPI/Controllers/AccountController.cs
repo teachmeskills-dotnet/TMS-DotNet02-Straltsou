@@ -1,12 +1,9 @@
-﻿using LearnApp.Common.Config;
+﻿using LearnApp.Common.Interfaces;
 using LearnApp.DAL.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
 
 namespace LearnApp.WebAPI.Controllers
 {
@@ -17,63 +14,66 @@ namespace LearnApp.WebAPI.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        private List<ApplicationUser> people = new List<ApplicationUser>
-        {
-            new ApplicationUser { Login="admin@gmail.com", Password="12345", Role = "admin" },
-            new ApplicationUser { Login="qwerty@gmail.com", Password="55555", Role = "user" }
-        };
+        private readonly IJwtAuthenticationManager<AuthenticationResponse, AuthenticationParameters> _jwtAuthenticationManager;
 
-        [HttpPost]
-        public IActionResult GetToken([FromBody] AuthParameters parameters)
+        public AccountController(IJwtAuthenticationManager<AuthenticationResponse, AuthenticationParameters> jwtAuthenticationManager)
         {
-            var identity = GetIdentity(parameters);
-            if (identity == null)
+            _jwtAuthenticationManager = jwtAuthenticationManager;
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public IActionResult Authenticate([FromBody] AuthenticationParameters parameters)
+        {
+            var response = _jwtAuthenticationManager.Authenticate(parameters, IpAddress());
+
+            if (response == null)
             {
-                return BadRequest(new { errorText = "Invalid username or password." });
+                return BadRequest(new { message = "Username or password is incorrect" });
             }
 
-            var now = DateTime.UtcNow;
+            SetTokenCookie(response.RefreshToken);
+            return Ok(response);
+        }
 
-            var jwt = new JwtSecurityToken(
-                issuer: AuthenticationOptions.ISSUER,
-                audience: AuthenticationOptions.AUDIENCE,
-                claims: identity.Claims,
-                notBefore: now,
-                expires: now.Add(TimeSpan.FromMinutes(AuthenticationOptions.LIFETIME)),
-                signingCredentials: new SigningCredentials(AuthenticationOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
+        [AllowAnonymous]
+        [HttpPost("refresh")]
+        public IActionResult Refresh()
+        {
+            var refreshToken = Request.Cookies["refreshToken"];
+            var response = _jwtAuthenticationManager.RefreshToken(refreshToken, IpAddress());
 
-            var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
-            var response = new
+            if (response == null)
             {
-                access_token = encodedJwt,
-                username = identity.Name
-            };
+                return Unauthorized(new { message = "Invalid token" });
+            }
+
+            SetTokenCookie(response.RefreshToken);
 
             return Ok(response);
         }
 
 
-        private ClaimsIdentity GetIdentity(AuthParameters parameters)
+        private void SetTokenCookie(string token)
         {
-            ApplicationUser user = people.FirstOrDefault(u => u.Login == parameters.Username && u.Password == parameters.Password);
-
-            if (user != null)
+            var cookieOptions = new CookieOptions
             {
-                var claims = new List<Claim>
-                {
-                    new Claim(ClaimsIdentity.DefaultNameClaimType, user.Login),
-                    new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role)
-                };
-
-                ClaimsIdentity claimsIdentity =
-                    new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,
-                    ClaimsIdentity.DefaultRoleClaimType);
-
-                return claimsIdentity;
-            }
-
-            return null;
+                HttpOnly = true,
+                Expires = DateTime.UtcNow.AddDays(7)
+            };
+            Response.Cookies.Append("refreshToken", token, cookieOptions);
         }
 
+        private string IpAddress()
+        {
+            if (Request.Headers.ContainsKey("X-Forwarded-For"))
+            {
+                return Request.Headers["X-Forwarded-For"];
+            }
+            else
+            {
+                return HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
+            }
+        }
     }
 }

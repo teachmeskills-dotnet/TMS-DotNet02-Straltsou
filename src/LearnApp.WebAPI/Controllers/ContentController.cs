@@ -5,6 +5,7 @@ using LearnApp.Core.Services;
 using LearnApp.DAL.DTO;
 using LearnApp.DAL.Models;
 using LearnApp.DAL.Models.ImageModel;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -44,6 +45,9 @@ namespace LearnApp.WebAPI.Controllers
         [Authorize]
         public async Task<ActionResult<YandexModel>> Translate(string input)
         {
+            var accessToken = await HttpContext.GetTokenAsync("refreshToken");
+
+
             return await _handler.GetYandexModelAsync(input);
         }
 
