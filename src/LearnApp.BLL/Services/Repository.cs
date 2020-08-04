@@ -39,6 +39,16 @@ namespace LearnApp.BLL.Services
         }
 
         /// <inheritdoc/>
+        public void DeleteEntity(T entity)
+        {
+            if (entity == null)
+            {
+                throw new ArgumentNullException(nameof(entity));
+            }
+            _dbSet.Remove(entity);
+        }
+
+        /// <inheritdoc/>
         public IEnumerable<T> GetAll()
         {
             return _dbSet.ToList();
@@ -54,6 +64,12 @@ namespace LearnApp.BLL.Services
         public async Task SaveChangesAsync()
         {
            await _context.SaveChangesAsync();
+        }
+
+        /// <inheritdoc/>
+        public bool SaveChanges()
+        {
+            return _context.SaveChanges() >= 0;
         }
     }
 }

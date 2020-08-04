@@ -15,6 +15,11 @@ namespace LearnApp.DAL.DTO
         public string Word { get; set; }
 
         /// <summary>
+        /// User identifier. 
+        /// </summary>
+        public int ApplicationUserId { get; set; }
+
+        /// <summary>
         /// Remembered definition.
         /// </summary>
         public string[] Definition { get; set; }

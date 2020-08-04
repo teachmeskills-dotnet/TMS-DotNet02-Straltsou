@@ -8,8 +8,14 @@ using System.Text;
 
 namespace LearnApp.DAL.Mapping
 {
+    /// <summary>
+    /// Card profile which sereves for mapping cards.
+    /// </summary>
     public class CardProfile : Profile
     {
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
         public CardProfile()
         {
             CreateMap<CardDto, Card>()

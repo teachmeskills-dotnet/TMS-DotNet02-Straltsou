@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 
@@ -28,6 +29,13 @@ namespace LearnApp.WebAPI.Controllers
         private readonly IMapper _mapper;
         private readonly HttpHandler _handler;
 
+        /// <summary>
+        /// Consturctor which resolves services below.
+        /// </summary>
+        /// <param name="options">API configuration options.</param>
+        /// <param name="handler">Service which serves as a handler for user requests.</param>
+        /// <param name="mapper">Auto mapper for mapping models.</param>
+        /// <param name="repository">Card repository.</param>
         public ContentController(IOptions<ApiConfig> options, HttpHandler handler, IMapper mapper, IRepository<Card> repository)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
@@ -45,14 +53,11 @@ namespace LearnApp.WebAPI.Controllers
         [Authorize]
         public async Task<ActionResult<YandexModel>> Translate(string input)
         {
-            var accessToken = await HttpContext.GetTokenAsync("refreshToken");
-
-
             return await _handler.GetYandexModelAsync(input);
         }
 
         /// <summary>
-        /// GET method for getting Unsplash model.
+        /// GET method for getting picture Unsplash model.
         /// </summary>
         /// <param name="userInput">Incoming update.</param>
         /// <returns>JSON object.</returns>
@@ -64,7 +69,7 @@ namespace LearnApp.WebAPI.Controllers
         }
 
         /// <summary>
-        /// GET method for getting Datamuse model.
+        /// GET method for getting Datamuse context model.
         /// </summary>
         /// <param name="userInput">Incoming update.</param>
         /// <returns>JSON object.</returns>
@@ -77,7 +82,7 @@ namespace LearnApp.WebAPI.Controllers
 
 
         /// <summary>
-        /// POST method for save information from the card.
+        /// POST method for save information from the card to database.
         /// </summary>
         /// <param name="card">Incoming card.</param>
         /// <returns>Ok result.</returns>
@@ -91,6 +96,40 @@ namespace LearnApp.WebAPI.Controllers
             await _repository.SaveChangesAsync();
 
             return Ok();
+        }
+
+        /// <summary>
+        /// Delete card from the database.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpDelete("{id}")]
+        public ActionResult DeleteCard(int id)
+        {
+            var cardFromDatabase = _repository.GetEntityByID(id);
+            if (cardFromDatabase == null)
+            {
+                return NotFound();
+            }
+
+            _repository.DeleteEntity(cardFromDatabase);
+            _repository.SaveChanges();
+
+            return Ok();
+        }
+
+        /// <summary>
+        /// Gives all cards remembered by specific user.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        [HttpGet("vocabulary")]
+        public IActionResult GetRememberedCard(int userId)
+        {
+            var cards = _repository.GetAll();
+            var rememberedCards = cards.Where(card => card.ApplicationUserId == userId);
+
+            return Ok(rememberedCards);
         }
     }
 }
