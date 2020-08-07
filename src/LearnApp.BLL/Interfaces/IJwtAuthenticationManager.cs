@@ -1,17 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using LearnApp.DAL.Models;
+using System.Collections.Generic;
 using System.Security.Claims;
 
-namespace LearnApp.Common.Interfaces
+namespace LearnApp.BLL.Interfaces
 {
     /// <summary>
     /// Interface of authentication manager based on JSON web token implementation.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <typeparam name="Z"></typeparam>
-    public interface IJwtAuthenticationManager<T,Z>
-        where T: class
-        where Z : class
-
+    public interface IJwtAuthenticationManager
     {
         /// <summary>
         /// Generate the JWT and refresh tokens based on giving parameters and IP address.
@@ -19,7 +15,7 @@ namespace LearnApp.Common.Interfaces
         /// <param name="parameters">Authentication parameters.</param>
         /// <param name="ipAddress">IP address of current user.</param>
         /// <returns></returns>
-        T Authenticate(Z parameters, string ipAddress);
+        AuthenticationResponse Authenticate(AuthenticationParameters parameters, string ipAddress);
 
         /// <summary>
         /// Generate a new refresh token based on giving last updated refresh token.
@@ -27,6 +23,6 @@ namespace LearnApp.Common.Interfaces
         /// <param name="token">Refresh token.</param>
         /// <param name="ipAddress">IP address of current user.</param>
         /// <returns></returns>
-        T RefreshToken(string token, string ipAddress);
+        AuthenticationResponse RefreshToken(string token, string ipAddress);
     }
 }

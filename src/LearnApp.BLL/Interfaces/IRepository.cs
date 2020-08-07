@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LearnApp.Common.Interfaces
+namespace LearnApp.BLL.Interfaces
 {
     /// <summary>
     /// Interface which allows to operate with entities.

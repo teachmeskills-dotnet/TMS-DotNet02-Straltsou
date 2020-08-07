@@ -1,4 +1,4 @@
-﻿using LearnApp.Common.Interfaces;
+﻿using LearnApp.BLL.Interfaces;
 using LearnApp.DAL.Models;
 using LearnApp.DAL.Persistence;
 using Microsoft.AspNetCore.Authorization;
@@ -17,7 +17,7 @@ namespace LearnApp.WebAPI.Controllers
     public class AccountController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        private readonly IJwtAuthenticationManager<AuthenticationResponse, AuthenticationParameters> _jwtAuthenticationManager;
+        private readonly IJwtAuthenticationManager _jwtAuthenticationManager;
         private readonly IRepository<ApplicationUser> _repository;
 
         /// <summary>
@@ -26,8 +26,8 @@ namespace LearnApp.WebAPI.Controllers
         /// <param name="context">Database context.</param>
         /// <param name="jwtAuthenticationManager">Jwt authentication manager.</param>
         /// <param name="repository">User repository.</param>
-        public AccountController(ApplicationDbContext context, 
-            IJwtAuthenticationManager<AuthenticationResponse, AuthenticationParameters> jwtAuthenticationManager,
+        public AccountController(ApplicationDbContext context,
+            IJwtAuthenticationManager jwtAuthenticationManager,
             IRepository<ApplicationUser> repository)
         {
             _context = context;
@@ -99,7 +99,7 @@ namespace LearnApp.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Establish the refresh token info into the cookie.
+        /// Establish the refresh token info into the cookie response.
         /// </summary>
         /// <param name="token">Refresh token.</param>
         private void SetTokenCookie(string token)

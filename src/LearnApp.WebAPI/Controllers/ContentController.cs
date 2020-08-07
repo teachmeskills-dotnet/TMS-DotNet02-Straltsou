@@ -1,17 +1,11 @@
-﻿using AutoMapper;
-using LearnApp.Common.Interfaces;
+﻿using LearnApp.BLL.Interfaces;
 using LearnApp.Core.Models;
-using LearnApp.Core.Services;
-using LearnApp.DAL.DTO;
-using LearnApp.DAL.Models;
 using LearnApp.DAL.Models.ImageModel;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 
@@ -25,9 +19,7 @@ namespace LearnApp.WebAPI.Controllers
     public class ContentController : ControllerBase
     {
         private readonly IOptions<ApiConfig> _options;
-        private readonly IRepository<Card> _repository;
-        private readonly IMapper _mapper;
-        private readonly HttpHandler _handler;
+        private readonly IHttpHandler _handler;
 
         /// <summary>
         /// Consturctor which resolves services below.
@@ -36,12 +28,10 @@ namespace LearnApp.WebAPI.Controllers
         /// <param name="handler">Service which serves as a handler for user requests.</param>
         /// <param name="mapper">Auto mapper for mapping models.</param>
         /// <param name="repository">Card repository.</param>
-        public ContentController(IOptions<ApiConfig> options, HttpHandler handler, IMapper mapper, IRepository<Card> repository)
+        public ContentController(IOptions<ApiConfig> options, IHttpHandler handler)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _handler = handler ?? throw new ArgumentNullException(nameof(handler));
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-            _repository = repository ?? throw new ArgumentNullException(nameof(handler));
         }
 
         /// <summary>
@@ -81,55 +71,55 @@ namespace LearnApp.WebAPI.Controllers
         }
 
 
-        /// <summary>
-        /// POST method for save information from the card to database.
-        /// </summary>
-        /// <param name="card">Incoming card.</param>
-        /// <returns>Ok result.</returns>
-        [HttpPost]
-        [Authorize]
-        public async Task<IActionResult> RememberCard([FromBody] CardDto cardDto)
-        {
-            var modelCard = _mapper.Map<Card>(cardDto);
+        ///// <summary>
+        ///// POST method for save information from the card to database.
+        ///// </summary>
+        ///// <param name="card">Incoming card.</param>
+        ///// <returns>Ok result.</returns>
+        //[HttpPost]
+        //[Authorize]
+        //public async Task<IActionResult> RememberCard([FromBody] CardDto cardDto)
+        //{
+        //    var modelCard = _mapper.Map<Card>(cardDto);
 
-            _repository.CreateEntity(modelCard);
-            await _repository.SaveChangesAsync();
+        //    _repository.CreateEntity(modelCard);
+        //    await _repository.SaveChangesAsync();
 
-            return Ok();
-        }
+        //    return Ok();
+        //}
 
-        /// <summary>
-        /// Delete card from the database.
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        [HttpDelete("{id}")]
-        public ActionResult DeleteCard(int id)
-        {
-            var cardFromDatabase = _repository.GetEntityByID(id);
-            if (cardFromDatabase == null)
-            {
-                return NotFound();
-            }
+        ///// <summary>
+        ///// Delete card from the database.
+        ///// </summary>
+        ///// <param name="id"></param>
+        ///// <returns></returns>
+        //[HttpDelete("{id}")]
+        //public ActionResult DeleteCard(int id)
+        //{
+        //    var cardFromDatabase = _repository.GetEntityByID(id);
+        //    if (cardFromDatabase == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            _repository.DeleteEntity(cardFromDatabase);
-            _repository.SaveChanges();
+        //    _repository.DeleteEntity(cardFromDatabase);
+        //    _repository.SaveChanges();
 
-            return Ok();
-        }
+        //    return Ok();
+        //}
 
-        /// <summary>
-        /// Gives all cards remembered by specific user.
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <returns></returns>
-        [HttpGet("vocabulary")]
-        public IActionResult GetRememberedCard(int userId)
-        {
-            var cards = _repository.GetAll();
-            var rememberedCards = cards.Where(card => card.ApplicationUserId == userId);
+        ///// <summary>
+        ///// Gives all cards remembered by specific user.
+        ///// </summary>
+        ///// <param name="userId"></param>
+        ///// <returns></returns>
+        //[HttpGet("vocabulary")]
+        //public IActionResult GetRememberedCard(int userId)
+        //{
+        //    var cards = _repository.GetAll();
+        //    var rememberedCards = cards.Where(card => card.ApplicationUserId == userId);
 
-            return Ok(rememberedCards);
-        }
+        //    return Ok(rememberedCards);
+        //}
     }
 }

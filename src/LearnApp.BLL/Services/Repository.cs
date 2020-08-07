@@ -1,4 +1,4 @@
-﻿using LearnApp.Common.Interfaces;
+﻿using LearnApp.BLL.Interfaces;
 using LearnApp.DAL.Persistence;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -63,7 +63,7 @@ namespace LearnApp.BLL.Services
         /// <inheritdoc/>
         public async Task SaveChangesAsync()
         {
-           await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
 
         /// <inheritdoc/>

@@ -1,5 +1,6 @@
 ﻿using Flurl;
 using Flurl.Http;
+using LearnApp.BLL.Interfaces;
 using LearnApp.Core.Models;
 using LearnApp.DAL.Models.ImageModel;
 using Microsoft.Extensions.Options;
@@ -12,7 +13,7 @@ namespace LearnApp.Core.Services
     /// <summary>
     /// Class which serves as a handler for user requests.
     /// </summary>
-    public class HttpHandler
+    public class HttpHandler : IHttpHandler
     {
         private readonly IOptions<ApiConfig> _options;
 
@@ -42,11 +43,7 @@ namespace LearnApp.Core.Services
                 .ReceiveJson<T>();
         }
 
-        /// <summary>
-        /// Returns JSON Yandex model through connection to API.
-        /// </summary>
-        /// <param name="input">Incoming update.</param>
-        /// <returns>JSON model.</returns>
+        /// <inheritdoc/>
         public async Task<YandexModel> GetYandexModelAsync(string input)
         {
             var host = "https://translate.yandex.net/";
@@ -63,11 +60,7 @@ namespace LearnApp.Core.Services
             return await GetJsonResultAsync<YandexModel>(host, path, parameters);
         }
 
-        /// <summary>
-        /// Returns JSON Unsplash model through connection to API.
-        /// </summary>
-        /// <param name="input">Incoming update.</param>
-        /// <returns>JSON model.</returns>
+        /// <inheritdoc/>
         public async Task<ImageModel> GetUnsplashModelAsync(string input)
         {
             var host = "https://api.unsplash.com/";
@@ -82,11 +75,7 @@ namespace LearnApp.Core.Services
             return await GetJsonResultAsync<ImageModel>(host, path, parameters);
         }
 
-        /// <summary>
-        /// Get JSON model from Datamuse API.
-        /// </summary>
-        /// <param name="userInput">User text input.</param>
-        /// <returns>JSON model.</returns>
+        /// <inheritdoc/>
         public async Task<List<ContextModel>> GetContextModelAsync(string input)
         {
             var response = await "https://api.datamuse.com/"

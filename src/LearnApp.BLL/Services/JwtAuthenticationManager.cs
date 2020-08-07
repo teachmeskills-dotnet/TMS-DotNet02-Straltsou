@@ -1,5 +1,5 @@
-﻿using LearnApp.Common.Config;
-using LearnApp.Common.Interfaces;
+﻿using LearnApp.BLL.Interfaces;
+using LearnApp.Common.Config;
 using LearnApp.DAL.Models;
 using LearnApp.DAL.Persistence;
 using Microsoft.Extensions.Options;
@@ -16,7 +16,7 @@ namespace LearnApp.BLL.Services
     /// <summary>
     /// Authentication manager based on JSON web token implementation.
     /// </summary>
-    public class JwtAuthenticationManager : IJwtAuthenticationManager<AuthenticationResponse, AuthenticationParameters>
+    public class JwtAuthenticationManager : IJwtAuthenticationManager
     {
         private readonly ApplicationDbContext _context;
         private readonly AppSettings _appSettings;

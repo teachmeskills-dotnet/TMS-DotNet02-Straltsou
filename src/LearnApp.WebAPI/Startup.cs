@@ -1,10 +1,9 @@
 using AutoMapper;
+using LearnApp.BLL.Interfaces;
 using LearnApp.BLL.Services;
 using LearnApp.Common.Config;
-using LearnApp.Common.Interfaces;
 using LearnApp.Core.Models;
 using LearnApp.Core.Services;
-using LearnApp.DAL.Models;
 using LearnApp.DAL.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -72,8 +71,8 @@ namespace LearnApp.WebAPI
                     });
 
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-            services.AddScoped<IJwtAuthenticationManager<AuthenticationResponse, AuthenticationParameters>, JwtAuthenticationManager>();
-            services.AddScoped<HttpHandler>();
+            services.AddScoped<IJwtAuthenticationManager, JwtAuthenticationManager>();
+            services.AddScoped<IHttpHandler, HttpHandler>();
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ApplicationConnection")));
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }
