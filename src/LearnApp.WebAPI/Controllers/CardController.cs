@@ -47,6 +47,11 @@ namespace LearnApp.WebAPI.Controllers
         [Authorize]
         public async Task<IActionResult> RememberCard([FromBody] CardDto cardDto)
         {
+            if(cardDto == null)
+            {
+                return BadRequest();
+            }
+
             var modelCard = _mapper.Map<Card>(cardDto);
 
             _repository.CreateEntity(modelCard);

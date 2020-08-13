@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LearnApp.DAL.Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -10,6 +11,11 @@ namespace LearnApp.DAL.DTO
     public class CardDto
     {
         /// <summary>
+        /// Card identifier.
+        /// </summary>
+        public int Id { get; set; }
+
+        /// <summary>
         /// Remembered word.
         /// </summary>
         public string Word { get; set; }
@@ -18,6 +24,11 @@ namespace LearnApp.DAL.DTO
         /// User identifier. 
         /// </summary>
         public int ApplicationUserId { get; set; }
+
+        /// <summary>
+        /// Navigational property for EF Core. 
+        /// </summary>
+        public ApplicationUser User { get; set; }
 
         /// <summary>
         /// Remembered definition.

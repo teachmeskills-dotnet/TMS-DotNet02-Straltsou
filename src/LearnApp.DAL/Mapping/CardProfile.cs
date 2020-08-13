@@ -14,8 +14,10 @@ namespace LearnApp.DAL.Mapping
         /// </summary>
         public CardProfile()
         {
-            CreateMap<CardDto, Card>()
-               .ForMember(card => card.Definition, opt => opt.MapFrom(dto => string.Join(", ", dto.Definition)));
+            CreateMap<Card, CardDto>().ReverseMap()
+               .ForMember(card => card.Definition, opt => opt.MapFrom(dto => string.Join(", ", dto.Definition)))
+               .ForMember(card => card.Id, opt => opt.Ignore())
+               .ForMember(card => card.User, opt => opt.Ignore());
         }
     }
 }

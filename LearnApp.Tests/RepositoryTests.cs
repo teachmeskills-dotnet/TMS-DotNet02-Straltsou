@@ -10,13 +10,13 @@ namespace LearnApp.Tests
     public class RepositoryTests
     {
         ApplicationDbContext context;
-        Repository<ApplicationUser> userRepository;
+        Repository<ApplicationUser> _userRepository;
 
         public RepositoryTests()
         {
             var contextOptions = GetDbContextOptions();
             context = new ApplicationDbContext(contextOptions);
-            userRepository = new Repository<ApplicationUser>(context);
+            _userRepository = new Repository<ApplicationUser>(context);
         }
 
         [Fact]
@@ -26,10 +26,10 @@ namespace LearnApp.Tests
             ApplicationUser user = new ApplicationUser { Id = 1, Password = "test123" };
 
             //Act
-            userRepository.CreateEntity(user);
+            _userRepository.CreateEntity(user);
             context.SaveChanges();
 
-            var currentUser = userRepository.GetEntityByID(1);
+            var currentUser = _userRepository.GetEntityByID(1);
 
             //Assert
             Assert.NotNull(currentUser);
@@ -41,14 +41,14 @@ namespace LearnApp.Tests
         {
             //Arrange
             ApplicationUser user = new ApplicationUser { Id = 1, Password = "test123" };
-            userRepository.CreateEntity(user);
+            _userRepository.CreateEntity(user);
             context.SaveChanges();
 
             //Act
-            userRepository.DeleteEntity(user);
+            _userRepository.DeleteEntity(user);
             context.SaveChanges();
 
-            var users = userRepository.GetAll();
+            var users = _userRepository.GetAll();
 
             //Assert
             Assert.Empty(users);

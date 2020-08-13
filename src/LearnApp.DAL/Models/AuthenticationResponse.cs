@@ -42,7 +42,7 @@ namespace LearnApp.DAL.Models
         public string RefreshToken { get; set; }
 
         /// <summary>
-        /// Constractor which accepts parameters below.
+        /// Constructor which accepts parameters below.
         /// </summary>
         /// <param name="user">Application user.</param>
         /// <param name="jwtToken">JWT.</param>

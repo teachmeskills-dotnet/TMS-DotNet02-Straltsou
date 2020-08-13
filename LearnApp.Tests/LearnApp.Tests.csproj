@@ -21,8 +21,4 @@
     <ProjectReference Include="..\src\LearnApp.WebAPI\LearnApp.WebAPI.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
 </Project>

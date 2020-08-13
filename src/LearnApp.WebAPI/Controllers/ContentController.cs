@@ -69,57 +69,5 @@ namespace LearnApp.WebAPI.Controllers
         {
             return await _handler.GetContextModelAsync(input);
         }
-
-
-        ///// <summary>
-        ///// POST method for save information from the card to database.
-        ///// </summary>
-        ///// <param name="card">Incoming card.</param>
-        ///// <returns>Ok result.</returns>
-        //[HttpPost]
-        //[Authorize]
-        //public async Task<IActionResult> RememberCard([FromBody] CardDto cardDto)
-        //{
-        //    var modelCard = _mapper.Map<Card>(cardDto);
-
-        //    _repository.CreateEntity(modelCard);
-        //    await _repository.SaveChangesAsync();
-
-        //    return Ok();
-        //}
-
-        ///// <summary>
-        ///// Delete card from the database.
-        ///// </summary>
-        ///// <param name="id"></param>
-        ///// <returns></returns>
-        //[HttpDelete("{id}")]
-        //public ActionResult DeleteCard(int id)
-        //{
-        //    var cardFromDatabase = _repository.GetEntityByID(id);
-        //    if (cardFromDatabase == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    _repository.DeleteEntity(cardFromDatabase);
-        //    _repository.SaveChanges();
-
-        //    return Ok();
-        //}
-
-        ///// <summary>
-        ///// Gives all cards remembered by specific user.
-        ///// </summary>
-        ///// <param name="userId"></param>
-        ///// <returns></returns>
-        //[HttpGet("vocabulary")]
-        //public IActionResult GetRememberedCard(int userId)
-        //{
-        //    var cards = _repository.GetAll();
-        //    var rememberedCards = cards.Where(card => card.ApplicationUserId == userId);
-
-        //    return Ok(rememberedCards);
-        //}
     }
 }

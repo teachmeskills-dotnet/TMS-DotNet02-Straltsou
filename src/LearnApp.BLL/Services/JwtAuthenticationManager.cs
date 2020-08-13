@@ -33,7 +33,7 @@ namespace LearnApp.BLL.Services
         }
 
         /// <summary>
-        /// Generate the JWT and refresh tokens based on giving parameters and IP address.
+        /// Generate and attaches to response the JWT and refresh token based on giving parameters and IP address.
         /// </summary>
         /// <param name="parameters">Authentication parameters - login, password.</param>
         /// <param name="ipAddress">IP address of current user.</param>
