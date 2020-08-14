@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace LearnApp.Core.Models.ImageModel
+namespace LearnApp.Common.Helpers.OuterAPI.ImageModel
 {
     /// <summary>
     /// User information.

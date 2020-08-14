@@ -1,6 +1,4 @@
-﻿using LearnApp.Core.Models;
-
-namespace LearnApp.Core.Models.ImageModel
+﻿namespace LearnApp.Common.Helpers.OuterAPI.ImageModel
 {
     /// <summary>
     /// Main image info.

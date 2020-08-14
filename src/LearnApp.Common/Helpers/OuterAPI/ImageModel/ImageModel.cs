@@ -1,7 +1,6 @@
-﻿using LearnApp.Core.Models.ImageModel;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace LearnApp.DAL.Models.ImageModel
+namespace LearnApp.Common.Helpers.OuterAPI.ImageModel
 {
     /// <summary>
     /// Generalized model for image.

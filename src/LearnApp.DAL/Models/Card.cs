@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace LearnApp.DAL.Models
+﻿namespace LearnApp.DAL.Models
 {
     /// <summary>
     /// Card model for saving the information from client.

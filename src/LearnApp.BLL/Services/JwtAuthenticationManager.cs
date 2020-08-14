@@ -1,5 +1,6 @@
 ﻿using LearnApp.BLL.Interfaces;
 using LearnApp.Common.Config;
+using LearnApp.Common.Helpers;
 using LearnApp.DAL.Models;
 using LearnApp.DAL.Persistence;
 using Microsoft.Extensions.Options;
@@ -28,7 +29,12 @@ namespace LearnApp.BLL.Services
         /// <param name="appSettings">Configuration of application security settings.</param>
         public JwtAuthenticationManager(ApplicationDbContext context, IOptions<AppSettings> appSettings)
         {
-            _context = context;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
+
+            if (appSettings is null)
+            {
+                throw new ArgumentNullException(nameof(appSettings));
+            }
             _appSettings = appSettings.Value;
         }
 

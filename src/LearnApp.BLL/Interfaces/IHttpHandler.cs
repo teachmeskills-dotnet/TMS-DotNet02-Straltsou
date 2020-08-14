@@ -1,10 +1,6 @@
-﻿using Flurl;
-using Flurl.Http;
-using LearnApp.Core.Models;
-using LearnApp.DAL.Models.ImageModel;
-using System;
+﻿using LearnApp.Common.Helpers.OuterAPI;
+using LearnApp.Common.Helpers.OuterAPI.ImageModel;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace LearnApp.BLL.Interfaces

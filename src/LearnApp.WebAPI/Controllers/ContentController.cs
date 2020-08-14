@@ -1,6 +1,7 @@
 ﻿using LearnApp.BLL.Interfaces;
-using LearnApp.Core.Models;
-using LearnApp.DAL.Models.ImageModel;
+using LearnApp.Common.Config;
+using LearnApp.Common.Helpers.OuterAPI;
+using LearnApp.Common.Helpers.OuterAPI.ImageModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;

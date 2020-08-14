@@ -1,4 +1,4 @@
-﻿namespace LearnApp.Core.Models
+﻿namespace LearnApp.Common.Helpers.OuterAPI
 {
     /// <summary>
     /// Yandex translate model.

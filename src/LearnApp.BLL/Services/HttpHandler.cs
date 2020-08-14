@@ -1,14 +1,15 @@
 ﻿using Flurl;
 using Flurl.Http;
 using LearnApp.BLL.Interfaces;
-using LearnApp.Core.Models;
-using LearnApp.DAL.Models.ImageModel;
+using LearnApp.Common.Config;
+using LearnApp.Common.Helpers.OuterAPI;
+using LearnApp.Common.Helpers.OuterAPI.ImageModel;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace LearnApp.Core.Services
+namespace LearnApp.BLL.Services
 {
     /// <summary>
     /// Class which serves as a handler for user requests.

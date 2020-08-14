@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Text.Json.Serialization;
+﻿using LearnApp.DAL.Models;
 
-namespace LearnApp.DAL.Models
+namespace LearnApp.BLL
 {
     /// <summary>
     /// Authentication response which contain information about JwtToken,RefreshToken,user id etc.

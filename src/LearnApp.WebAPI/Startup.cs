@@ -2,8 +2,6 @@ using AutoMapper;
 using LearnApp.BLL.Interfaces;
 using LearnApp.BLL.Services;
 using LearnApp.Common.Config;
-using LearnApp.Core.Models;
-using LearnApp.Core.Services;
 using LearnApp.DAL.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;

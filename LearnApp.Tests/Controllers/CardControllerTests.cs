@@ -1,14 +1,11 @@
 ﻿using AutoMapper;
 using LearnApp.BLL.Interfaces;
-using LearnApp.BLL.Services;
-using LearnApp.Common.Config;
 using LearnApp.DAL.DTO;
 using LearnApp.DAL.Models;
 using LearnApp.DAL.Persistence;
 using LearnApp.WebAPI.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Moq;
 using System;
 using System.Threading.Tasks;

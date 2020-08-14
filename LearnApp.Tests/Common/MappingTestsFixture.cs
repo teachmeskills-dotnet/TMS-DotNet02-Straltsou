@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using LearnApp.DAL.DTO;
 using LearnApp.DAL.Mapping;
 
 namespace LearnApp.Tests.Common

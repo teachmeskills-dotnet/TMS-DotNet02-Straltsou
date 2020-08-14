@@ -1,4 +1,4 @@
-﻿namespace LearnApp.DAL.Models
+﻿namespace LearnApp.Common.Helpers
 {
     /// <summary>
     /// Authentication parameters.

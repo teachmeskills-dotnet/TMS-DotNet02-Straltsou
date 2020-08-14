@@ -1,4 +1,5 @@
 ﻿using LearnApp.BLL.Interfaces;
+using LearnApp.Common.Helpers;
 using LearnApp.DAL.Models;
 using LearnApp.DAL.Persistence;
 using Microsoft.AspNetCore.Authorization;
@@ -30,9 +31,9 @@ namespace LearnApp.WebAPI.Controllers
             IJwtAuthenticationManager jwtAuthenticationManager,
             IRepository<ApplicationUser> repository)
         {
-            _context = context;
-            _jwtAuthenticationManager = jwtAuthenticationManager;
-            _repository = repository;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _jwtAuthenticationManager = jwtAuthenticationManager ?? throw new ArgumentNullException(nameof(jwtAuthenticationManager)); ;
+            _repository = repository ?? throw new ArgumentNullException(nameof(repository)); ;
         }
 
         /// <summary>
@@ -42,6 +43,7 @@ namespace LearnApp.WebAPI.Controllers
         /// <returns></returns>
         [AllowAnonymous]
         [HttpPost]
+        //[ValidateAntiForgeryToken]
         public IActionResult Authenticate([FromBody] AuthenticationParameters parameters)
         {
             var response = _jwtAuthenticationManager.Authenticate(parameters, IpAddress());
@@ -61,6 +63,7 @@ namespace LearnApp.WebAPI.Controllers
         /// <returns></returns>
         [AllowAnonymous]
         [HttpPost("refresh")]
+        //[ValidateAntiForgeryToken]
         public IActionResult Refresh([FromBody] string refreshToken)
         {
             //var refreshToken = Request.Cookies["refreshToken"];
@@ -82,6 +85,7 @@ namespace LearnApp.WebAPI.Controllers
         /// <returns></returns>
         [AllowAnonymous]
         [HttpPost("register")]
+        //[ValidateAntiForgeryToken]
         public IActionResult Register([FromBody] AuthenticationParameters parameters)
         {
             var user = _context.Users.SingleOrDefault(x => x.Login == parameters.Username && x.Password == parameters.Password);

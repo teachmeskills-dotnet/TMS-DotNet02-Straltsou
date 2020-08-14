@@ -1,6 +1,4 @@
-﻿using LearnApp.DAL.Models;
-using System.Collections.Generic;
-using System.Security.Claims;
+﻿using LearnApp.Common.Helpers;
 
 namespace LearnApp.BLL.Interfaces
 {

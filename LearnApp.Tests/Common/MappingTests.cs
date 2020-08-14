@@ -2,8 +2,6 @@
 using LearnApp.DAL.DTO;
 using LearnApp.DAL.Models;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace LearnApp.Tests.Common
