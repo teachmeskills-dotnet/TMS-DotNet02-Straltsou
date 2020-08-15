@@ -7,11 +7,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
+using BC = BCrypt.Net.BCrypt;
 
 namespace LearnApp.WebAPI.Controllers
 {
     /// <summary>
-    /// Controller for login and registration.
+    /// Controller which responsible for any interaction with account.
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
@@ -20,6 +21,7 @@ namespace LearnApp.WebAPI.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IJwtAuthenticationManager _jwtAuthenticationManager;
         private readonly IRepository<ApplicationUser> _repository;
+        private readonly IEmailService _emailService;
 
         /// <summary>
         /// Constructor which resolves services below.
@@ -29,11 +31,13 @@ namespace LearnApp.WebAPI.Controllers
         /// <param name="repository">User repository.</param>
         public AccountController(ApplicationDbContext context,
             IJwtAuthenticationManager jwtAuthenticationManager,
-            IRepository<ApplicationUser> repository)
+            IRepository<ApplicationUser> repository,
+            IEmailService emailService)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
-            _jwtAuthenticationManager = jwtAuthenticationManager ?? throw new ArgumentNullException(nameof(jwtAuthenticationManager)); ;
-            _repository = repository ?? throw new ArgumentNullException(nameof(repository)); ;
+            _jwtAuthenticationManager = jwtAuthenticationManager ?? throw new ArgumentNullException(nameof(jwtAuthenticationManager));
+            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+            _emailService = emailService ?? throw new ArgumentNullException(nameof(emailService));
         }
 
         /// <summary>
@@ -50,10 +54,29 @@ namespace LearnApp.WebAPI.Controllers
 
             if (response == null)
             {
-                return BadRequest(new { message = "Username or password is incorrect" });
+                return BadRequest(new { message = "Username or password is incorrect. No verification by email." });
             }
 
             return Ok(response);
+        }
+
+        /// <summary>
+        /// Register new user by the incoming authentication parameters.
+        /// </summary>
+        /// <param name="parameters">Authentication parameters - Login(email), password.</param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpPost("register")]
+        //[ValidateAntiForgeryToken]
+        public IActionResult Register([FromBody] AuthenticationParameters parameters)
+        {
+            var registerSucceded = _jwtAuthenticationManager.Register(parameters, "https://localhost:5001"); //Use - Request.Headers["origin"] when application is deployed
+            if (!registerSucceded)
+            {
+                return BadRequest(new { message = "User with current login already exists." });
+            }
+
+            return Ok(new { message = "Registration successful, please check your email for verification instructions" });
         }
 
         /// <summary>
@@ -79,34 +102,23 @@ namespace LearnApp.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Register new user by the incoming authentication parameters.
+        /// Receives verification token from the email confirmation message and assign verification status.
         /// </summary>
-        /// <param name="parameters">Authentication parameters - Login(email), password.</param>
+        /// <param name="token">Verification token.</param>
         /// <returns></returns>
         [AllowAnonymous]
-        [HttpPost("register")]
-        //[ValidateAntiForgeryToken]
-        public IActionResult Register([FromBody] AuthenticationParameters parameters)
+        [HttpGet("verify-email")]
+        public IActionResult VerifyEmail(string token)
         {
-            var user = _context.Users.SingleOrDefault(x => x.Login == parameters.Username && x.Password == parameters.Password);
-            if (user != null)
-            {
-                return BadRequest(new { message = "User with current login already exists." });
-            }
-
-            user = new ApplicationUser { Login = parameters.Username, Password = parameters.Password };
-            _repository.CreateEntity(user);
-            _repository.SaveChanges();
-
-            return Ok();
-
+            _jwtAuthenticationManager.VerifyEmail(token);
+            return Ok(new { message = "Verification successful, you can now login" });
         }
 
         /// <summary>
         /// Establish the refresh token info into the cookie response.
         /// </summary>
         /// <param name="token">Refresh token.</param>
-        private void SetTokenCookie(string token)
+        private void SetTokenCookie(string token) // Use this method for transfer tokens in cookie.
         {
             var cookieOptions = new CookieOptions
             {

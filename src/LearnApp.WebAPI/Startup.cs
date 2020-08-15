@@ -71,6 +71,7 @@ namespace LearnApp.WebAPI
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped<IJwtAuthenticationManager, JwtAuthenticationManager>();
             services.AddScoped<IHttpHandler, HttpHandler>();
+            services.AddScoped<IEmailService, EmailService>();
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ApplicationConnection")));
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }

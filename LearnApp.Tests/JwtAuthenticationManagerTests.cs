@@ -1,4 +1,5 @@
-﻿using LearnApp.BLL.Services;
+﻿using LearnApp.BLL.Interfaces;
+using LearnApp.BLL.Services;
 using LearnApp.Common.Config;
 using LearnApp.Common.Helpers;
 using LearnApp.DAL.Models;
@@ -7,24 +8,32 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System;
 using Xunit;
+using BC = BCrypt.Net.BCrypt;
 
 namespace LearnApp.Tests
 {
     public class JwtAuthenticationManagerTests
     {
-        Repository<ApplicationUser> _userRepository;
         ApplicationDbContext _context;
         IOptions<AppSettings> _options;
+        IRepository<ApplicationUser> _repository;
+        IEmailService _emailService;
 
         public JwtAuthenticationManagerTests()
         {
             var contextOptions = GetDbContextOptions();
             _context = new ApplicationDbContext(contextOptions);
-            _userRepository = new Repository<ApplicationUser>(_context);
+            _repository = new Repository<ApplicationUser>(_context);
             _options = Options.Create(new AppSettings
             {
-                SecretEncryptionKey = "supersecret123testing456key"
+                SecretEncryptionKey = "supersecret123testing456key",
+                EmailFrom = "test@test.com",
+                SmtpHost = "test@test.com",
+                SmtpPort = 111,
+                SmtpUser = "testUser",
+                SmtpPass = "testPassword"
             });
+            _emailService = new EmailService(_options);
         }
 
 
@@ -32,14 +41,20 @@ namespace LearnApp.Tests
         public void Authenticate_WhenCurrentUserExists_ReturnNotNullResponse()
         {
             //Arrange
-            var user = new ApplicationUser { Id = 111, Login = "test@test.com", Password = "test123" };
+            var user = new ApplicationUser
+            {
+                Id = 111,
+                Login = "test@test.com",
+                Verified = DateTime.Now,
+                PasswordHash = BC.HashPassword("test123"),
+            };
             _context.Add(user);
             _context.SaveChanges();
 
             var parameters = new AuthenticationParameters { Username = "test@test.com", Password = "test123" };
             var ip = "127.0.0.1";
 
-            var manager = new JwtAuthenticationManager(_context, _options);
+            var manager = new JwtAuthenticationManager(_context, _options, _repository, _emailService);
 
             //Act
             var authResponse = manager.Authenticate(parameters, ip);
@@ -55,14 +70,20 @@ namespace LearnApp.Tests
         public void RefreshToken_WhenAuthenticatedUserRequestsForRefresh_ReturnNewRefreshedTokensResponse()
         {
             //Arrange
-            var user = new ApplicationUser { Id = 111, Login = "test@test.com", Password = "test123" };
+            var user = new ApplicationUser
+            {
+                Id = 111,
+                Login = "test@test.com",
+                Verified = DateTime.Now,
+                PasswordHash = BC.HashPassword("test123"),
+            };
             _context.Add(user);
             _context.SaveChanges();
 
             var parameters = new AuthenticationParameters { Username = "test@test.com", Password = "test123" };
             var ip = "127.0.0.1";
 
-            var manager = new JwtAuthenticationManager(_context, _options);
+            var manager = new JwtAuthenticationManager(_context, _options, _repository, _emailService);
 
             //Act
             var authResponse = manager.Authenticate(parameters, ip);
@@ -81,6 +102,5 @@ namespace LearnApp.Tests
                 .UseInMemoryDatabase(Guid.NewGuid().ToString())
                 .Options;
         }
-
     }
 }

@@ -23,7 +23,7 @@ namespace LearnApp.Tests
         public void CreateEntity_WhenCreateNewEntity_ReturnsNotNull()
         {
             //Arrange
-            ApplicationUser user = new ApplicationUser { Id = 1, Password = "test123" };
+            ApplicationUser user = new ApplicationUser { Id = 1, PasswordHash = "test123" };
 
             //Act
             _userRepository.CreateEntity(user);
@@ -40,7 +40,7 @@ namespace LearnApp.Tests
         public void DeleteEntity_WhenDeleteExistingEntity_ReturnEmpty()
         {
             //Arrange
-            ApplicationUser user = new ApplicationUser { Id = 1, Password = "test123" };
+            ApplicationUser user = new ApplicationUser { Id = 1, PasswordHash = "test123" };
             _userRepository.CreateEntity(user);
             context.SaveChanges();
 

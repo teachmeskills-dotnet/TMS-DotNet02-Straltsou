@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace LearnApp.DAL.Models
@@ -19,9 +20,39 @@ namespace LearnApp.DAL.Models
         public string Login { get; set; }
 
         /// <summary>
+        /// Email.
+        /// </summary>
+        public string Email { get; set; }
+
+        /// <summary>
         /// Password of user.
         /// </summary>
-        public string Password { get; set; }
+        public string PasswordHash { get; set; }
+
+        /// <summary>
+        /// Verification token for email service.
+        /// </summary>
+        public string VerificationToken { get; set; }
+
+        /// <summary>
+        /// Date of verification.
+        /// </summary>
+        public DateTime? Verified { get; set; }
+
+        /// <summary>
+        /// User is verified.
+        /// </summary>
+        public bool IsVerified => Verified.HasValue;
+
+        /// <summary>
+        /// Date of account creation.
+        /// </summary>
+        public DateTime Created { get; set; }
+
+        /// <summary>
+        /// Date of account update.
+        /// </summary>
+        public DateTime? Updated { get; set; }
 
         /// <summary>
         /// Role of user.
