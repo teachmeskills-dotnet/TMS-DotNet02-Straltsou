@@ -42,9 +42,9 @@ namespace LearnApp.WebAPI.Controllers
         /// <returns>JSON object.</returns>
         [HttpGet("translate")]
         [Authorize]
-        public async Task<ActionResult<YandexModel>> Translate(string input)
+        public async Task<ActionResult<TranslateModel>> Translate(string input)
         {
-            return await _handler.GetYandexModelAsync(input);
+            return await _handler.GetTranslateModelAsync(input);
         }
 
         /// <summary>

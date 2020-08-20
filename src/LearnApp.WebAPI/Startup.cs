@@ -27,9 +27,10 @@ namespace LearnApp.WebAPI
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors();
+
             services.Configure<CookiePolicyOptions>(options =>
             {
-                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
@@ -72,7 +73,7 @@ namespace LearnApp.WebAPI
             services.AddScoped<IJwtAuthenticationManager, JwtAuthenticationManager>();
             services.AddScoped<IHttpHandler, HttpHandler>();
             services.AddScoped<IEmailService, EmailService>();
-            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ApplicationConnection")));
+            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ApplicationConnection"))); // UseNpgsql
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }
 

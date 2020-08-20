@@ -35,9 +35,10 @@ namespace LearnApp.BLL.Services
         /// <param name="segments">Endpoint set.</param>
         /// <param name="parameters">Set of query params.</param>
         /// <returns>JSON model.</returns>
-        public async Task<T> GetJsonResultAsync<T>(string host, object[] segments, object parameters)
+        public async Task<T> GetJsonResultAsync<T>(string host, object[] segments, object parameters, object headers = null)
         {
             return await host
+                .WithHeaders(headers)
                 .AppendPathSegments(segments)
                 .SetQueryParams(parameters)
                 .GetAsync()
@@ -45,25 +46,38 @@ namespace LearnApp.BLL.Services
         }
 
         /// <inheritdoc/>
-        public async Task<YandexModel> GetYandexModelAsync(string input)
+        public async Task<TranslateModel> GetTranslateModelAsync(string input)
         {
-            var host = "https://translate.yandex.net/";
+            if(input == null)
+            {
+                throw new ArgumentNullException(nameof(input));
+            }
+
+            var host = "https://systran-systran-platform-for-language-processing-v1.p.rapidapi.com/";
             var segments = new List<string>
             {
-                "api",
-                "v1.5",
-                "tr.json",
+                "translation",
+                "text",
                 "translate"
             };
             object[] path = segments.ToArray();
-            var parameters = new { key = _options.Value.YandexAPI, text = input, lang = "en-ru" };
 
-            return await GetJsonResultAsync<YandexModel>(host, path, parameters);
+            var headers = new { x_rapidapi_host = "systran-systran-platform-for-language-processing-v1.p.rapidapi.com", 
+                x_rapidapi_key = _options.Value.TranslateAPI };
+
+            var parameters = new { source = "en", target = "ru", input = input };
+
+            return await GetJsonResultAsync<TranslateModel>(host, path, parameters, headers);
         }
 
         /// <inheritdoc/>
         public async Task<ImageModel> GetUnsplashModelAsync(string input)
         {
+            if (input == null)
+            {
+                throw new ArgumentNullException(nameof(input));
+            }
+
             var host = "https://api.unsplash.com/";
             var segments = new List<string>
             {
@@ -79,6 +93,11 @@ namespace LearnApp.BLL.Services
         /// <inheritdoc/>
         public async Task<List<ContextModel>> GetContextModelAsync(string input)
         {
+            if (input == null)
+            {
+                throw new ArgumentNullException(nameof(input));
+            }
+
             var response = await "https://api.datamuse.com/"
                 .AppendPathSegment("words")
                 .SetQueryParams(new { ml = input, qe = "ml", max = "8", md = "d" })

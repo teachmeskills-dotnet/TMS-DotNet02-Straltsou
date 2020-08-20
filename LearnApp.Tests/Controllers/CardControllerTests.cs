@@ -28,7 +28,7 @@ namespace LearnApp.Tests.Controllers
             {
                 Word = "test word",
                 Definition = new string[] { "test definition1", "test definition2", "test definition3" },
-                ApplicationUserId = 1
+                ApplicationUserId = 11
             };
 
             //Act
@@ -38,14 +38,6 @@ namespace LearnApp.Tests.Controllers
             //Assert
             //Assert.NotEmpty(entities);
             Assert.IsType<OkResult>(result);
-
-        }
-
-        private DbContextOptions<ApplicationDbContext> GetDbContextOptions()
-        {
-            return new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString())
-                .Options;
         }
     }
 }

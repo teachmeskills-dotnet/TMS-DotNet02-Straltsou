@@ -11,11 +11,11 @@ namespace LearnApp.BLL.Interfaces
     public interface IHttpHandler
     {
         /// <summary>
-        /// Returns JSON Yandex model through connection to API.
+        /// Returns JSON translate model through connection to API.
         /// </summary>
         /// <param name="input">Incoming update.</param>
         /// <returns>JSON model.</returns>
-        public Task<YandexModel> GetYandexModelAsync(string input);
+        public Task<TranslateModel> GetTranslateModelAsync(string input);
 
         /// <summary>
         /// Returns JSON Unsplash model through connection to API.

@@ -8,7 +8,7 @@
         /// <summary>
         /// Yandex translate API key.
         /// </summary>
-        public string YandexAPI { get; set; }
+        public string TranslateAPI { get; set; }
 
         /// <summary>
         /// Unsplash service API key.

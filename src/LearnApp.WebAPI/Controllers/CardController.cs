@@ -9,7 +9,10 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace LearnApp.WebAPI.Controllers
-{
+{   
+    /// <summary>
+    /// Controller which responsible for interactions with word/definition card object.
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class CardController : ControllerBase
