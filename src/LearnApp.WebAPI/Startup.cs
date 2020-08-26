@@ -28,6 +28,7 @@ namespace LearnApp.WebAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors();
+            services.AddHealthChecks();
 
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -73,7 +74,7 @@ namespace LearnApp.WebAPI
             services.AddScoped<IJwtAuthenticationManager, JwtAuthenticationManager>();
             services.AddScoped<IHttpHandler, HttpHandler>();
             services.AddScoped<IEmailService, EmailService>();
-            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ApplicationConnection"))); // UseNpgsql
+            services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(Configuration.GetConnectionString("ApplicationConnection"))); // UseNpgsql
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }
 
@@ -89,6 +90,7 @@ namespace LearnApp.WebAPI
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHealthChecks("/health");
             });
         }
     }

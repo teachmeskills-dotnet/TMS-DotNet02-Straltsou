@@ -17,13 +17,13 @@ namespace LearnApp.WebAPI.Controllers
     [ApiController]
     public class CardController : ControllerBase
     {
-        private readonly IRepository<Card> _repository;
+        private readonly IRepository<Card> _cardRepository;
         private readonly IMapper _mapper;
 
-        public CardController(IMapper mapper, IRepository<Card> repository)
+        public CardController(IMapper mapper, IRepository<Card> cardRepository)
         {
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+            _cardRepository = cardRepository ?? throw new ArgumentNullException(nameof(cardRepository));
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace LearnApp.WebAPI.Controllers
         [Authorize]
         public IActionResult GetRememberedCard(int userId)
         {
-            var cards = _repository.GetAll();
+            var cards = _cardRepository.GetAll();
             var rememberedCards = cards.Where(card => card.ApplicationUserId == userId);
 
             return Ok(rememberedCards);
@@ -57,8 +57,8 @@ namespace LearnApp.WebAPI.Controllers
 
             var modelCard = _mapper.Map<Card>(cardDto);
 
-            _repository.CreateEntity(modelCard);
-            await _repository.SaveChangesAsync();
+            _cardRepository.CreateEntity(modelCard);
+            await _cardRepository.SaveChangesAsync();
 
             return Ok();
         }
@@ -72,14 +72,14 @@ namespace LearnApp.WebAPI.Controllers
         [Authorize]
         public async Task<IActionResult> DeleteCard(int id)
         {
-            var cardFromDatabase = _repository.GetEntityByID(id);
+            var cardFromDatabase = _cardRepository.GetEntityByID(id);
             if (cardFromDatabase == null)
             {
                 return NotFound();
             }
 
-            _repository.DeleteEntity(cardFromDatabase);
-            await _repository.SaveChangesAsync();
+            _cardRepository.DeleteEntity(cardFromDatabase);
+            await _cardRepository.SaveChangesAsync();
 
             return Ok();
         }

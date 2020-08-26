@@ -47,7 +47,6 @@ namespace LearnApp.WebAPI.Controllers
         /// <returns></returns>
         [AllowAnonymous]
         [HttpPost]
-        //[ValidateAntiForgeryToken]
         public IActionResult Authenticate([FromBody] AuthenticationParameters parameters)
         {
             var response = _jwtAuthenticationManager.Authenticate(parameters, IpAddress());
@@ -67,10 +66,9 @@ namespace LearnApp.WebAPI.Controllers
         /// <returns></returns>
         [AllowAnonymous]
         [HttpPost("register")]
-        //[ValidateAntiForgeryToken]
         public IActionResult Register([FromBody] AuthenticationParameters parameters)
         {
-            var registerSucceded = _jwtAuthenticationManager.Register(parameters, "https://localhost:5001"); //Use - Request.Headers["origin"] when application is deployed
+            var registerSucceded = _jwtAuthenticationManager.Register(parameters, "https://learn-application.herokuapp.com"); //Request.Headers["origin"]
             if (!registerSucceded)
             {
                 return BadRequest(new { message = "User with current login already exists." });
@@ -86,7 +84,6 @@ namespace LearnApp.WebAPI.Controllers
         /// <returns></returns>
         [AllowAnonymous]
         [HttpPost("refresh")]
-        //[ValidateAntiForgeryToken]
         public IActionResult Refresh([FromBody] string refreshToken)
         {
             //var refreshToken = Request.Cookies["refreshToken"];
@@ -110,8 +107,12 @@ namespace LearnApp.WebAPI.Controllers
         [HttpGet("verify-email")]
         public IActionResult VerifyEmail(string token)
         {
-            _jwtAuthenticationManager.VerifyEmail(token);
-            return Ok(new { message = "Verification successful, you can now login" });
+            var result = _jwtAuthenticationManager.VerifyEmail(token);
+            if(!result)
+            {
+                return BadRequest(new { message = "Incorrect verification token."});
+            }
+            return Ok();
         }
 
         /// <summary>

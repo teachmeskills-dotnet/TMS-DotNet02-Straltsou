@@ -37,6 +37,6 @@ namespace LearnApp.BLL.Interfaces
         /// </summary>
         /// <param name="token">Verification token.</param>
         /// <returns></returns>
-        void VerifyEmail(string token);
+        bool VerifyEmail(string token);
     }
 }

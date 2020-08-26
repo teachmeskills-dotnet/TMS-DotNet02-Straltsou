@@ -125,7 +125,7 @@ namespace LearnApp.BLL.Services
         }
 
         /// <inheritdoc/>
-        public void VerifyEmail(string token)
+        public bool VerifyEmail(string token)
         {
             var account = _context.Users.SingleOrDefault(x => x.VerificationToken == token);
 
@@ -139,6 +139,7 @@ namespace LearnApp.BLL.Services
 
             _context.Users.Update(account);
             _context.SaveChanges();
+            return true;
         }
 
         /// <summary>

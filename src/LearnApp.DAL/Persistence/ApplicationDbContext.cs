@@ -29,6 +29,16 @@ namespace LearnApp.DAL.Persistence
         /// <param name="options"></param>
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
-        { }    
+        {
+            Database.Migrate();
+        }
+
+        /// <summary>
+        /// Seed database with initial data.
+        /// </summary>
+        /// <param name="modelBuilder"></param>
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+        }
     }
 }
