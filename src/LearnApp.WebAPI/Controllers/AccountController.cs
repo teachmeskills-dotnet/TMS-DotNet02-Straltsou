@@ -112,7 +112,7 @@ namespace LearnApp.WebAPI.Controllers
             {
                 return BadRequest(new { message = "Incorrect verification token."});
             }
-            return Ok();
+            return Redirect("https://learn-app.netlify.app");
         }
 
         /// <summary>
