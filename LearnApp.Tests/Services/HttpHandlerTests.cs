@@ -2,15 +2,12 @@
 using LearnApp.Common.Config;
 using Microsoft.Extensions.Options;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace LearnApp.Tests
 {
     public class HttpHandlerTests
     {
-
         [Fact]
         public async void GetContextModelAsync_WhenParameterIsGiven_ReturnDeserializedJSONList()
         {

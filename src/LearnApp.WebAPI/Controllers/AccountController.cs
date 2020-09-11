@@ -6,8 +6,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Linq;
-using BC = BCrypt.Net.BCrypt;
 
 namespace LearnApp.WebAPI.Controllers
 {
@@ -18,10 +16,7 @@ namespace LearnApp.WebAPI.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
         private readonly IJwtAuthenticationManager _jwtAuthenticationManager;
-        private readonly IRepository<ApplicationUser> _repository;
-        private readonly IEmailService _emailService;
 
         /// <summary>
         /// Constructor which resolves services below.
@@ -29,15 +24,9 @@ namespace LearnApp.WebAPI.Controllers
         /// <param name="context">Database context.</param>
         /// <param name="jwtAuthenticationManager">Jwt authentication manager.</param>
         /// <param name="repository">User repository.</param>
-        public AccountController(ApplicationDbContext context,
-            IJwtAuthenticationManager jwtAuthenticationManager,
-            IRepository<ApplicationUser> repository,
-            IEmailService emailService)
+        public AccountController(IJwtAuthenticationManager jwtAuthenticationManager)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
             _jwtAuthenticationManager = jwtAuthenticationManager ?? throw new ArgumentNullException(nameof(jwtAuthenticationManager));
-            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
-            _emailService = emailService ?? throw new ArgumentNullException(nameof(emailService));
         }
 
         /// <summary>
@@ -108,26 +97,11 @@ namespace LearnApp.WebAPI.Controllers
         public IActionResult VerifyEmail(string token)
         {
             var result = _jwtAuthenticationManager.VerifyEmail(token);
-            if(!result)
+            if (!result)
             {
-                return BadRequest(new { message = "Incorrect verification token."});
+                return BadRequest(new { message = "Incorrect verification token." });
             }
             return Redirect("https://learn-app.netlify.app");
-        }
-
-        /// <summary>
-        /// Establish the refresh token info into the cookie response.
-        /// </summary>
-        /// <param name="token">Refresh token.</param>
-        private void SetTokenCookie(string token) // Use this method for transfer tokens in cookie.
-        {
-            var cookieOptions = new CookieOptions
-            {
-                HttpOnly = true,
-                IsEssential = true,
-                Expires = DateTime.UtcNow.AddDays(7)
-            };
-            Response.Cookies.Append("refreshToken", token, cookieOptions);
         }
 
         /// <summary>

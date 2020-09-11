@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace LearnApp.Common.Config
+﻿namespace LearnApp.Common.Config
 {
     /// <summary>
     /// Application settings for JWT creation.

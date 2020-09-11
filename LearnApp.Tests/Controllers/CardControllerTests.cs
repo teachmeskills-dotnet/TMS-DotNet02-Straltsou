@@ -2,12 +2,9 @@
 using LearnApp.BLL.Interfaces;
 using LearnApp.DAL.DTO;
 using LearnApp.DAL.Models;
-using LearnApp.DAL.Persistence;
 using LearnApp.WebAPI.Controllers;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Moq;
-using System;
 using System.Threading.Tasks;
 using Xunit;
 

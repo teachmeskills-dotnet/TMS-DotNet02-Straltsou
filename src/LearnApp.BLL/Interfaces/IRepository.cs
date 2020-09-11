@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace LearnApp.BLL.Interfaces
@@ -11,7 +9,6 @@ namespace LearnApp.BLL.Interfaces
     /// <typeparam name="T">Class of entity.</typeparam>
     public interface IRepository<T> where T : class
     {
-
         /// <summary>
         /// Create new entity.
         /// </summary>

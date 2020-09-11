@@ -1,7 +1,4 @@
 ﻿using LearnApp.DAL.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace LearnApp.DAL.DTO
 {

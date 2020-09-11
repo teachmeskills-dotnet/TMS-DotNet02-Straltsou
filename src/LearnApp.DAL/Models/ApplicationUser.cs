@@ -59,7 +59,6 @@ namespace LearnApp.DAL.Models
         /// </summary>
         public string Role { get; set; }
 
-
         /// <summary>
         /// List of saved cards related to specific user.
         /// </summary>

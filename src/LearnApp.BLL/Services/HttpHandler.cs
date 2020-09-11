@@ -48,7 +48,7 @@ namespace LearnApp.BLL.Services
         /// <inheritdoc/>
         public async Task<TranslateModel> GetTranslateModelAsync(string input)
         {
-            if(input == null)
+            if (input == null)
             {
                 throw new ArgumentNullException(nameof(input));
             }
@@ -62,8 +62,11 @@ namespace LearnApp.BLL.Services
             };
             object[] path = segments.ToArray();
 
-            var headers = new { x_rapidapi_host = "systran-systran-platform-for-language-processing-v1.p.rapidapi.com", 
-                x_rapidapi_key = _options.Value.TranslateAPI };
+            var headers = new
+            {
+                x_rapidapi_host = "systran-systran-platform-for-language-processing-v1.p.rapidapi.com",
+                x_rapidapi_key = _options.Value.TranslateAPI
+            };
 
             var parameters = new { source = "en", target = "ru", input = input };
 
@@ -103,6 +106,7 @@ namespace LearnApp.BLL.Services
                 .SetQueryParams(new { ml = input, qe = "ml", max = "8", md = "d" })
                 .GetAsync()
                 .ReceiveJson<List<ContextModel>>();
+
             return response;
         }
     }

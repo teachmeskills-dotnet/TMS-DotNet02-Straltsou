@@ -3,21 +3,17 @@ using LearnApp.BLL.Services;
 using LearnApp.Common.Config;
 using LearnApp.Common.Helpers;
 using LearnApp.DAL.Models;
-using LearnApp.DAL.Persistence;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using System;
 using Xunit;
-using BC = BCrypt.Net.BCrypt;
 
 namespace LearnApp.Tests
 {
     public class JwtAuthenticationManagerTests : BaseTestsFixture
     {
-        IJwtAuthenticationManager _jwtAuthenticationManager;
-        IOptions<AppSettings> _options;
-        IRepository<ApplicationUser> _repository;
-        IEmailService _emailService;
+        private IJwtAuthenticationManager _jwtAuthenticationManager;
+        private IOptions<AppSettings> _options;
+        private IRepository<ApplicationUser> _repository;
+        private IEmailService _emailService;
 
         public JwtAuthenticationManagerTests()
         {
@@ -34,7 +30,6 @@ namespace LearnApp.Tests
             _emailService = new EmailService(_options);
             _jwtAuthenticationManager = new JwtAuthenticationManager(Context, _options, _repository, _emailService);
         }
-
 
         [Fact]
         public void Authenticate_WhenCurrentUserExists_ReturnNotNullResponse()

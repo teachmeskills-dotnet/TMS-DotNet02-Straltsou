@@ -1,15 +1,12 @@
 ﻿using LearnApp.BLL.Services;
 using LearnApp.DAL.Models;
-using LearnApp.DAL.Persistence;
-using Microsoft.EntityFrameworkCore;
-using System;
 using Xunit;
 
 namespace LearnApp.Tests
 {
     public class RepositoryTests : BaseTestsFixture
     {
-        Repository<ApplicationUser> _userRepository;
+        private Repository<ApplicationUser> _userRepository;
 
         public RepositoryTests()
         {
@@ -30,7 +27,6 @@ namespace LearnApp.Tests
 
             //Assert
             Assert.NotNull(currentUser);
-
         }
 
         [Fact]

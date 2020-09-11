@@ -6,8 +6,6 @@ using Microsoft.Extensions.Options;
 using MimeKit;
 using MimeKit.Text;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace LearnApp.BLL.Services
 {
@@ -24,7 +22,7 @@ namespace LearnApp.BLL.Services
         /// <param name="appSettings">Application settings.</param>
         public EmailService(IOptions<AppSettings> appSettings)
         {
-            if(appSettings is null)
+            if (appSettings is null)
             {
                 throw new ArgumentNullException(nameof(appSettings));
             }

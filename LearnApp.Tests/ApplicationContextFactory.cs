@@ -3,7 +3,6 @@ using LearnApp.DAL.Persistence;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using BC = BCrypt.Net.BCrypt;
 
 namespace LearnApp.Tests

@@ -9,7 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace LearnApp.WebAPI.Controllers
-{   
+{
     /// <summary>
     /// Controller which responsible for interactions with word/definition card object.
     /// </summary>
@@ -20,7 +20,8 @@ namespace LearnApp.WebAPI.Controllers
         private readonly IRepository<Card> _cardRepository;
         private readonly IMapper _mapper;
 
-        public CardController(IMapper mapper, IRepository<Card> cardRepository)
+        public CardController(IMapper mapper,
+                              IRepository<Card> cardRepository)
         {
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _cardRepository = cardRepository ?? throw new ArgumentNullException(nameof(cardRepository));
@@ -50,7 +51,7 @@ namespace LearnApp.WebAPI.Controllers
         [Authorize]
         public async Task<IActionResult> RememberCard([FromBody] CardDto cardDto)
         {
-            if(cardDto == null)
+            if (cardDto == null)
             {
                 return BadRequest();
             }

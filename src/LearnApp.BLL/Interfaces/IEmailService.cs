@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace LearnApp.BLL.Interfaces
+﻿namespace LearnApp.BLL.Interfaces
 {
     /// <summary>
     /// Service for sending email approval for registration.

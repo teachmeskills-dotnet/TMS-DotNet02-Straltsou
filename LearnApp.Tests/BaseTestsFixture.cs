@@ -1,9 +1,6 @@
 ﻿using AutoMapper;
-using LearnApp.DAL.Mapping;
 using LearnApp.DAL.Persistence;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace LearnApp.Tests
 {

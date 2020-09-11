@@ -29,7 +29,6 @@ namespace LearnApp.BLL.Interfaces
         /// </summary>
         /// <param name="userInput">User text input.</param>
         /// <returns>JSON model.</returns>
-
         public Task<List<ContextModel>> GetContextModelAsync(string input);
     }
 }

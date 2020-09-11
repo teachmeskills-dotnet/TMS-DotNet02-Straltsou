@@ -20,7 +20,6 @@
         /// </summary>
         public string Definition { get; set; }
 
-
         /// <summary>
         /// User identifier. 
         /// </summary>

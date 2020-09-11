@@ -1,5 +1,4 @@
 ﻿using LearnApp.Common.Helpers;
-using LearnApp.DAL.Models;
 
 namespace LearnApp.BLL.Interfaces
 {
