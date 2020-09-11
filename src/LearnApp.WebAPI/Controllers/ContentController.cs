@@ -1,52 +1,68 @@
-﻿using LearnApp.Core.Models;
-using LearnApp.Core.Services;
+﻿using LearnApp.BLL.Interfaces;
+using LearnApp.Common.Config;
+using LearnApp.Common.Helpers.OuterAPI;
+using LearnApp.Common.Helpers.OuterAPI.ImageModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
 
 namespace LearnApp.WebAPI.Controllers
 {
     /// <summary>
-    /// Controller for processing translate requests.
+    /// Controller for processing content requests.
     /// </summary>
     [ApiController]
     [Route("api/[controller]")]
     public class ContentController : ControllerBase
     {
-        private readonly HttpHandler handler = new HttpHandler();
+        private readonly IHttpHandler _handler;
+
+        /// <summary>
+        /// Consturctor which resolves services below.
+        /// </summary>
+        /// <param name="handler">Service which serves as a handler for user requests.</param>
+        public ContentController(IHttpHandler handler)
+        {
+            _handler = handler ?? throw new ArgumentNullException(nameof(handler));
+        }
 
         /// <summary>
         /// GET method for getting YandexTranslate model.
         /// </summary>
-        /// <param name="userInput">Incoming update.</param>
+        /// <param name="input">Incoming update.</param>
         /// <returns>JSON object.</returns>
-        [HttpPost]
-        public async Task<ActionResult<YandexModel>> PostTranslate(string input)
+        [HttpGet("translate")]
+        [Authorize]
+        public async Task<ActionResult<TranslateModel>> Translate(string input)
         {
-            return await handler.GetYandexModel(input);
+            return await _handler.GetTranslateModelAsync(input);
         }
 
         /// <summary>
-        /// GET method for getting Unsplash model.
+        /// GET method for getting picture Unsplash model.
         /// </summary>
-        /// <param name="userInput">Incoming update.</param>
+        /// <param name="input">Incoming update.</param>
         /// <returns>JSON object.</returns>
-        [HttpPost]
-        public async Task<ActionResult<ImageModel>> PostPicture(string input)
+        [HttpGet("picture")]
+        [Authorize]
+        public async Task<ActionResult<ImageModel>> Picture(string input)
         {
-            return await handler.GetUnsplashModel(input);
+            return await _handler.GetUnsplashModelAsync(input);
         }
 
         /// <summary>
-        /// GET method for getting Datamuse model.
+        /// GET method for getting Datamuse context model.
         /// </summary>
-        /// <param name="userInput">Incoming update.</param>
+        /// <param name="input">Incoming update.</param>
         /// <returns>JSON object.</returns>
-        [HttpPost]
-        public async Task<ActionResult<IEnumerable<ContextModel>>> PostContext(string input)
+        [HttpGet("context")]
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<ContextModel>>> Context(string input)
         {
-            return await handler.GetContextModelAsync(input);
+            return await _handler.GetContextModelAsync(input);
         }
     }
 }

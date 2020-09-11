@@ -1,24 +1,22 @@
 ﻿using Flurl;
 using Flurl.Http;
-using LearnApp.Core.Models;
+using LearnApp.BLL.Interfaces;
+using LearnApp.Common.Config;
+using LearnApp.Common.Helpers.OuterAPI;
+using LearnApp.Common.Helpers.OuterAPI.ImageModel;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace LearnApp.Core.Services
+namespace LearnApp.BLL.Services
 {
     /// <summary>
-    /// Class which serves as a hendler for user requests.
+    /// Class which serves as a handler for user requests.
     /// </summary>
-    public class HttpHandler
+    public class HttpHandler : IHttpHandler
     {
         private readonly IOptions<ApiConfig> _options;
-
-        /// <summary>
-        /// Default constuctor.
-        /// </summary>
-        public HttpHandler() { }
 
         /// <summary>
         /// Constructor which serve as transmitter of secret data.
@@ -37,48 +35,57 @@ namespace LearnApp.Core.Services
         /// <param name="segments">Endpoint set.</param>
         /// <param name="parameters">Set of query params.</param>
         /// <returns>JSON model.</returns>
-        public async Task<T> GetJsonResultAsync<T>(string host, object[] segments, object parameters)
+        public async Task<T> GetJsonResultAsync<T>(string host, object[] segments, object parameters, object headers = null)
         {
             return await host
+                .WithHeaders(headers)
                 .AppendPathSegments(segments)
                 .SetQueryParams(parameters)
                 .GetAsync()
                 .ReceiveJson<T>();
         }
 
-        /// <summary>
-        /// Returns JSON Yandex model through connection to API.
-        /// </summary>
-        /// <param name="input">Incoming update.</param>
-        /// <returns>JSON model.</returns>
-        public async Task<YandexModel> GetYandexModel(string input)
+        /// <inheritdoc/>
+        public async Task<TranslateModel> GetTranslateModelAsync(string input)
         {
-            var host = "https://translate.yandex.net/";
+            if (input == null)
+            {
+                throw new ArgumentNullException(nameof(input));
+            }
+
+            var host = "https://systran-systran-platform-for-language-processing-v1.p.rapidapi.com/";
             var segments = new List<string>
             {
-                "api",
-                "v1.5",
-                "tr.json",
+                "translation",
+                "text",
                 "translate"
             };
             object[] path = segments.ToArray();
-            var parameters = new { key = _options.Value.YandexAPI, text = input, lang = "en-ru" };
 
-            return await GetJsonResultAsync<YandexModel>(host, path, parameters);
+            var headers = new
+            {
+                x_rapidapi_host = "systran-systran-platform-for-language-processing-v1.p.rapidapi.com",
+                x_rapidapi_key = _options.Value.TranslateAPI
+            };
+
+            var parameters = new { source = "en", target = "ru", input = input };
+
+            return await GetJsonResultAsync<TranslateModel>(host, path, parameters, headers);
         }
 
-        /// <summary>
-        /// Returns JSON Unsplash model through connection to API.
-        /// </summary>
-        /// <param name="input">Incoming update.</param>
-        /// <returns>JSON model.</returns>
-        public async Task<ImageModel> GetUnsplashModel(string input)
+        /// <inheritdoc/>
+        public async Task<ImageModel> GetUnsplashModelAsync(string input)
         {
+            if (input == null)
+            {
+                throw new ArgumentNullException(nameof(input));
+            }
+
             var host = "https://api.unsplash.com/";
             var segments = new List<string>
             {
-                "photos",
-                "random"
+                "search",
+                "photos"
             };
             object[] path = segments.ToArray();
             var parameters = new { client_id = _options.Value.UnsplashAPI, query = input };
@@ -86,18 +93,20 @@ namespace LearnApp.Core.Services
             return await GetJsonResultAsync<ImageModel>(host, path, parameters);
         }
 
-        /// <summary>
-        /// Get JSON model from Datamuse API.
-        /// </summary>
-        /// <param name="userInput">User text input.</param>
-        /// <returns>JSON model.</returns>
+        /// <inheritdoc/>
         public async Task<List<ContextModel>> GetContextModelAsync(string input)
         {
+            if (input == null)
+            {
+                throw new ArgumentNullException(nameof(input));
+            }
+
             var response = await "https://api.datamuse.com/"
                 .AppendPathSegment("words")
-                .SetQueryParams(new { ml = input, qe = "ml", max = "7", md = "d" })
+                .SetQueryParams(new { ml = input, qe = "ml", max = "8", md = "d" })
                 .GetAsync()
                 .ReceiveJson<List<ContextModel>>();
+
             return response;
         }
     }

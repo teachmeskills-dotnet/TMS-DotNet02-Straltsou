@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace LearnApp.Core.Models
+﻿namespace LearnApp.Common.Helpers.OuterAPI.ImageModel
 {
     /// <summary>
     /// User information.

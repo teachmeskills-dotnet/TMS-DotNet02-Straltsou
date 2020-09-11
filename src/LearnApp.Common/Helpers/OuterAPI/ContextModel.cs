@@ -1,4 +1,4 @@
-﻿namespace LearnApp.Core.Models
+﻿namespace LearnApp.Common.Helpers.OuterAPI
 {
     /// <summary>
     /// Root JSON object of context word.

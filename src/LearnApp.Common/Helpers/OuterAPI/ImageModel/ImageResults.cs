@@ -1,11 +1,9 @@
-﻿using LearnApp.Core.Models;
-
-namespace LearnApp.Core.Models
+﻿namespace LearnApp.Common.Helpers.OuterAPI.ImageModel
 {
     /// <summary>
-    /// Root JSON object of image.
+    /// Main image info.
     /// </summary>
-    public class ImageModel
+    public class ImageResult
     {
         public string id { get; set; }
         public string created_at { get; set; }
@@ -31,7 +29,7 @@ namespace LearnApp.Core.Models
     }
 
     /// <summary>
-    /// Link for searching image.
+    /// Image links by quality.
     /// </summary>
     public class Urls
     {
